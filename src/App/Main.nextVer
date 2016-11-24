@@ -1,0 +1,20 @@
+module App.Main exposing (..)
+
+import Navigation as Nav
+import App.Model exposing (Model, initModel)
+import App.Message exposing (Msg)
+import App.View exposing (view)
+import App.Logic as Logic
+import Reuse.CmdExtras as CmdE
+
+init : Nav.Location -> (Model, Cmd Msg)
+init location = (initModel, CmdE.pure <| Logic.resolveLocation location)
+
+-- main : Program Never Model Msg
+main =
+    Nav.program Logic.resolveLocation
+        { init = init
+        , view = view
+        , update = Logic.update
+        , subscriptions = Sub.none
+        }
