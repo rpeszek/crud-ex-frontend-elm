@@ -4,5 +4,14 @@
     box-sizing: border-box;
 }
 .l-box {
-    padding: 1px;
+    margin: 2px;
+}
+
+textarea.std {
+  width: 50%;
+  height: 150px;
+}
+
+input[type=text].std{
+  width: 50%; 
 }
