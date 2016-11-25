@@ -6,16 +6,23 @@ import Reuse.Read.View as ViewS
 import Reuse.Read.Message as MsgS 
 import Reuse.Model.ModelPlus as ModelS
 import Thing.Read.Logic as Logic
+import Reuse.Common.Styles as DefStyle
 
 view : Logic.Model -> Html Logic.Msg
 view model =
-  div [] [
-   div []
+  div DefStyle.readGrid [
+   div DefStyle.readLabel
+    [ text "Name:"
+    ],
+   div DefStyle.readContent
     [ text model.model.name
     ],
-   div []
+   div DefStyle.readLabel
+    [ text "Description:"
+    ],
+   div DefStyle.readLongContent
     [ text model.model.description
     ],
-    ViewS.viewButtons model,
-    ViewS.viewError model
+    ViewS.viewError model,
+    ViewS.viewButtons model
   ] 

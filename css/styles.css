@@ -22,3 +22,15 @@ textarea.std {
 input[type=text].std{
   width: 50%; 
 }
+
+div.long-text {
+  white-space: pre;
+}
+
+.bottom-padding-small {
+   padding-bottom: 5px;
+}
+
+.top-padding-medium {
+   padding-top: 15px;
+}
