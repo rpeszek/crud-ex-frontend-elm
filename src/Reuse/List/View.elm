@@ -6,21 +6,22 @@ import Html.Events exposing (onClick)
 import Reuse.Model.ModelEntity as ModelS
 import Reuse.Common.View as ViewC
 import Reuse.List.Message as MsgS
+import Reuse.Common.Styles as DefStyle
 
 viewList : (model -> Html (MsgS.ListMsg model msg)) -> ModelS.ModelEntityList model -> Html (MsgS.ListMsg model msg)
 viewList elementView listModel = 
    div [] [
-     div[] [button [onClick <| MsgS.CreateRequest] [text "Create"]] ,
+     viewError listModel , 
      div[] <| List.map (viewListElement elementView) listModel.elements ,
-     viewError listModel 
+     div DefStyle.buttonSet [button (DefStyle.buttonPrimary ++ [onClick <| MsgS.CreateRequest]) [text "Create New"]]
    ] 
   
 viewListElement : (model -> Html (MsgS.ListMsg model msg)) -> ModelS.ModelEntity model -> Html (MsgS.ListMsg model msg)
 viewListElement elementView element =
-   div [] [
-     div [] [elementView element.entity] , 
-     div [] [button [onClick <| MsgS.ViewRequest element.id] [text "View"]]
-    ] 
+     div DefStyle.listElement [
+         elementView element.entity
+         , a (DefStyle.listElementLink ++ [onClick <| MsgS.ViewRequest element.id]) [text "(view)"]
+     ]     
     
 -- TODO generalize (this is same as in common)
 viewError : ModelS.ModelEntityList model -> Html msg

@@ -15,4 +15,4 @@ view = ViewS.viewList viewThing
 
 viewThing : Thing -> Html msg
 viewThing thing = 
-     div[] [text thing.name]
+     text thing.name

@@ -50,6 +50,11 @@ buttonPrimary : List( Html.Attribute msg )
 buttonPrimary = [Attr.classList [(lBox, True), (Pure.button, True), (Pure.buttonPrimary, True)]] 
 
 -- list
+listElement : List( Html.Attribute msg )
+listElement = [Attr.classList [("bottom-padding-small", True)]]
+
+listElementLink : List( Html.Attribute msg )
+listElementLink = [Attr.classList [("left-marging-medium", True)]]
 
 -- misc
 errorBox : List( Html.Attribute msg )

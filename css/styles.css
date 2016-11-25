@@ -27,10 +27,24 @@ div.long-text {
   white-space: pre;
 }
 
+.bottom-padding-medium {
+   padding-bottom: 15px;
+}
+
 .bottom-padding-small {
-   padding-bottom: 5px;
+   padding-bottom: 15px;
+}
+
+.left-marging-medium {
+   margin-left: 5px;
 }
 
 .top-padding-medium {
    padding-top: 15px;
+}
+
+a {   
+    color: blue; 
+    border-bottom:1px solid blue; 
+    cursor: pointer;  
 }
