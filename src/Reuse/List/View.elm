@@ -27,6 +27,6 @@ viewError : ModelS.ModelEntityList model -> Html msg
 viewError model =
     case model.err of
        Just (txt, _) -> 
-          div [ style [("color", "red")] ] [ text txt ]
+          ViewC.viewErrorTxt txt
        Nothing -> 
           div [] []

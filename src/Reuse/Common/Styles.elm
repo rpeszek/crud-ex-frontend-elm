@@ -30,3 +30,6 @@ buttonDefault = [Attr.classList [(lBox, True), (Pure.button, True)] ]
 
 buttonPrimary : List( Html.Attribute msg )
 buttonPrimary = [Attr.classList [(lBox, True), (Pure.button, True), (Pure.buttonPrimary, True)]] 
+
+errorBox : List( Html.Attribute msg )
+errorBox = [Attr.class "error"]
