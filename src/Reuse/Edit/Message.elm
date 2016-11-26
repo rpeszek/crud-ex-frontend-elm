@@ -36,7 +36,7 @@ updateEditModel :  UpdateConfig model msg ->
                    ModelS.ModelPlus model -> 
                    (ModelS.ModelPlus model, Cmd (EditMsg model msg))
 
-updateEditModel updateConf msg model = case (Debug.log "Edit Msg" msg) of
+updateEditModel updateConf msg model = case msg of
     Init initMaybeId -> case initMaybeId of
          Just modelId ->
               (ModelS.initExistingModel modelId updateConf.empty, 

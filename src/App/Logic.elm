@@ -73,4 +73,4 @@ resolveLocation location =
        Ok elmRoute ->
           App.RoutingModuleMsg <| RoutingModule.RouteMsg elmRoute
        Err msg -> 
-          App.RoutingModuleMsg <| RoutingModule.UnknownRouteMsg <| Debug.log msg url
+          App.RoutingModuleMsg <| RoutingModule.UnknownRouteMsg <| Debug.log ("error parsing location" ++ msg) url
