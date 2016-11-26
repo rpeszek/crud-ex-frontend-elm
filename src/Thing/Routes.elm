@@ -1,8 +1,9 @@
 module Thing.Routes exposing (..)
 
 import Thing.Model exposing (ThingId)
-
-serverBase = "http://localhost:3000"
+import ServerConfig exposing (serverBase)
+ 
+-- serverBase = "http://localhost:3000"
 
 thingsR : String
 thingsR = serverBase ++ "/things"

@@ -22,7 +22,7 @@ thingConfig = {
  , listToCreateCmd = ElmRoute.navigateTo ElmRoute.CreateThingR }
 
 update : App.Msg -> App.Model -> (App.Model, Cmd App.Msg)
-update msg model = case msg of
+update msg model = case Debug.log "App Msg" msg of
    App.RoutingModuleMsg innerMsg -> case innerMsg of
       RoutingModule.RouteMsg elmRoute ->
           (App.setRoute elmRoute model, CmdE.pure <| Debug.log "dispatchTo" <| Dispatch.dispatch elmRoute)
@@ -36,6 +36,20 @@ update msg model = case msg of
 -- deprecated (will not work after upgrade to next version)
 type alias RouteData = Result String ElmRoute.ElmRoute
 
+-- type alias Model = {
+--    routeM : RoutingModule.Model
+--  , thingM : ThingModule.Model } 
+
+
+isRouteTheSame : RouteData -> App.Model -> Bool
+isRouteTheSame data model = 
+            let currentRoute = RoutingModule.getRoute model.routeM
+            in case data of 
+               Ok route ->
+                  Debug.log "equals" (route == currentRoute)
+               Err _ ->
+                  Debug.log "e2" (currentRoute == ElmRoute.defaultRoute)  
+
 routeParser : Nav.Parser (Result String ElmRoute.ElmRoute)
 routeParser =
     Nav.makeParser ElmRoute.parseElmRoute
@@ -47,10 +61,12 @@ resolveParsedRoute res = case res of
           App.RoutingModuleMsg <| RoutingModule.RouteMsg elmRoute
      Err msg -> 
           App.RoutingModuleMsg <| RoutingModule.UnknownRouteMsg <| Debug.log "invalid route" msg
-   
+ 
 urlUpdate : RouteData -> App.Model -> (App.Model, Cmd App.Msg)
-urlUpdate data model = (model, CmdE.pure <| resolveParsedRoute data)
-
+urlUpdate data model = 
+       if isRouteTheSame data model 
+       then (model, Cmd.none)
+       else (model, CmdE.pure <| resolveParsedRoute data)
 
 -- new version of library (after update to .18)
 resolveLocation : Nav.Location -> App.Msg

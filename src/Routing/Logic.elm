@@ -18,5 +18,8 @@ setRoute route model = {model | route = route, err = Nothing}
 setErr : String -> Model -> Model
 setErr url model = {model | route = ElmRoute.defaultRoute, err = Just <| "Invalid URL " ++ url}
 
+getRoute : Model -> ElmRoute.ElmRoute 
+getRoute model = model.route 
+
 initModel : Model
 initModel = {route = ElmRoute.defaultRoute, err = Nothing}

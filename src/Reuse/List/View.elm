@@ -8,8 +8,8 @@ import Reuse.Common.View as ViewC
 import Reuse.List.Message as MsgS
 import Reuse.Common.Styles as DefStyle
 
-viewList : (model -> Html (MsgS.ListMsg model msg)) -> ModelS.ModelEntityList model -> Html (MsgS.ListMsg model msg)
-viewList elementView listModel = 
+viewReuse : (model -> Html (MsgS.ListMsg model msg)) -> ModelS.ModelEntityList model -> Html (MsgS.ListMsg model msg)
+viewReuse elementView listModel = 
    div [] [
      viewError listModel , 
      div[] <| List.map (viewListElement elementView) listModel.elements ,
@@ -21,8 +21,8 @@ viewListElement elementView element =
      div DefStyle.listElement [
          elementView element.entity
          , a (DefStyle.listElementLink ++ [onClick <| MsgS.ViewRequest element.id]) [text "(view)"]
-     ]     
-    
+     ]   
+
 -- TODO generalize (this is same as in common)
 viewError : ModelS.ModelEntityList model -> Html msg
 viewError model =

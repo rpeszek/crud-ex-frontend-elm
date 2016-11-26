@@ -17,10 +17,10 @@ type EditMsg model msg =
 
 -- hmm that does compile (msg -> model -> cmd) could be data consturtor Cmd (EditMsg model msg)
 
-
 -- model and msg are inner, eg. ThingMsg, Thing
 type alias UpdateConfig model msg = {
     innerUpdate : msg -> model -> (model, Cmd (EditMsg model msg))
+  , validate : model -> Result String model
   , empty : model
   , getModel : Int -> Cmd (HttpS.HttpRes HttpS.HttpGET model)
   , putModel : Int -> model -> Cmd (HttpS.HttpRes HttpS.HttpPUT model)
@@ -36,13 +36,13 @@ updateEditModel :  UpdateConfig model msg ->
                    ModelS.ModelPlus model -> 
                    (ModelS.ModelPlus model, Cmd (EditMsg model msg))
 
-updateEditModel updateConf msg model = case msg of
+updateEditModel updateConf msg model = case (Debug.log "Edit Msg" msg) of
     Init initMaybeId -> case initMaybeId of
          Just modelId ->
-              debug "InitEdit " (ModelS.initExistingModel modelId updateConf.empty, 
+              (ModelS.initExistingModel modelId updateConf.empty, 
                                  Cmd.map GetHttpResult <| updateConf.getModel modelId)
          Nothing ->
-              debug "InitCreate " (ModelS.initNewModel updateConf.empty, Cmd.none)
+              (ModelS.initNewModel updateConf.empty, Cmd.none)
     GetHttpResult getModelMsg -> case getModelMsg of 
          HttpS.HttpResOk HttpS.HttpGET newInnerModel ->
             debug "GetResOK " (ModelS.setModel newInnerModel model, Cmd.none)
@@ -59,11 +59,15 @@ updateEditModel updateConf msg model = case msg of
             debug "PostResOk " ({model | model = newInnerModelEntity.entity, id = Just newInnerModelEntity.id}, updateConf.exitCmd model.id)
          HttpS.HttpResErr HttpS.HttpPOST msg error ->
             debug ("PostResErr " ++ toString error) (ModelS.setErr msg (Just error) model, Cmd.none)
-    SaveRequest -> case model.id of
-        Just modelId -> 
-            debug "SaveReq " (model, Cmd.map PutHttpResult <| updateConf.putModel modelId model.model)
-        Nothing ->
-            debug "CreateReq " (model, Cmd.map PostHttpResult <| updateConf.postModel model.model)
+    SaveRequest -> case updateConf.validate model.model of
+         Ok validatedInnerModel ->
+           case model.id of
+             Just modelId -> 
+                debug "SaveReq " (ModelS.setModel validatedInnerModel model, Cmd.map PutHttpResult <| updateConf.putModel modelId validatedInnerModel)
+             Nothing ->
+                debug "CreateReq " (ModelS.setModel validatedInnerModel model, Cmd.map PostHttpResult <| updateConf.postModel validatedInnerModel)
+         Err errMsg ->
+             Debug.log "validation err" (ModelS.setErr errMsg Nothing model, Cmd.none)
     CancelRequest -> 
             debug "CancelReq" (model, updateConf.exitCmd model.id)
     InnerMsg innerMsg -> 

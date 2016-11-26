@@ -8,10 +8,8 @@ import Reuse.Model.ModelPlus as ModelS
 import Thing.List.Logic as Logic
 import Thing.Model exposing (Thing)
 
-
 view : Logic.Model -> Html Logic.Msg
-view = ViewS.viewList viewThing
-
+view = ViewS.viewReuse viewThing
 
 viewThing : Thing -> Html msg
 viewThing thing = 
