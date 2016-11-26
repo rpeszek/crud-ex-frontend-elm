@@ -9,7 +9,7 @@ import Reuse.Common.View as ViewC
 import Reuse.Common.Styles as DefStyle
 
 viewError : ModelS.ModelPlus model -> Html msg
-viewError =  ViewC.viewError
+viewError model =  div DefStyle.formMsg [ViewC.viewError model]
 
 viewButtons : ModelS.ModelPlus model -> Html (MsgS.EditMsg model msg)
 viewButtons model =    

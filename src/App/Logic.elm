@@ -36,19 +36,15 @@ update msg model = case Debug.log "App Msg" msg of
 -- deprecated (will not work after upgrade to next version)
 type alias RouteData = Result String ElmRoute.ElmRoute
 
--- type alias Model = {
---    routeM : RoutingModule.Model
---  , thingM : ThingModule.Model } 
-
 
 isRouteTheSame : RouteData -> App.Model -> Bool
 isRouteTheSame data model = 
             let currentRoute = RoutingModule.getRoute model.routeM
             in case data of 
                Ok route ->
-                  Debug.log "equals" (route == currentRoute)
+                  (route == currentRoute)
                Err _ ->
-                  Debug.log "e2" (currentRoute == ElmRoute.defaultRoute)  
+                  (currentRoute == ElmRoute.defaultRoute)  
 
 routeParser : Nav.Parser (Result String ElmRoute.ElmRoute)
 routeParser =

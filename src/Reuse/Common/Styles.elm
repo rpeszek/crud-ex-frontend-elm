@@ -20,6 +20,9 @@ formRowDefault = [Attr.class Pure.controlGroup]
 formButtons : List( Html.Attribute msg )
 formButtons = [Attr.class "pure-controls"]
 
+formMsg : List( Html.Attribute msg )
+formMsg = [Attr.class "pure-controls"]
+
 textInputDefault : List( Html.Attribute msg )
 textInputDefault = [Attr.class stdStyle]
 
