@@ -8,7 +8,7 @@ __Goals:__
 * Following TEA architecture closely
 * CRUD code reuse across crud-ed entities
 * Minimize styling decisions on Entity level (keep them reusable)
-* Almost-SPA (large page scopes), SPA ready architecture.
+* Almost-SPA (large page scopes), SPA ready design.
 
 __TODO List:__  
 * Server configuration of elm programs
@@ -16,7 +16,7 @@ __TODO List:__
 * Add has-many relationship to example CRUD
 * Add owner/user (server defined, elm displayed)
 * List pagination support
-* Convert to Elm v.0.18
+* Convert to Elm v.0.18 (from .17)
 * Keep rethinking styling and views
 * Improve validation
 
@@ -39,4 +39,4 @@ __Conclusions (so far):__
 * Would like to see 
    * more stable language API
    * package manager working with ported (JS FFI) projects
-   * language polymorphism (is it FP if I cannot define classic denotational abstractions?) 
+   * language polymorphism (is it FP if I cannot define classic denotational abstractions? How about laws and proof obligation?) 
