@@ -9,7 +9,7 @@
 ##
 # Apply deployment configuration (this should go away in the future)
 ##
-cp -f src/ServerConfig.deploy src/ServerConfig.elm
+cp -f src/StaticConfig.deploy src/StaticConfig.elm
 
 elm-make src/App/Main.elm --output=../crud-ex-backend-yesod/static/js/elm-app.js
 
@@ -21,4 +21,4 @@ touch ../crud-ex-backend-yesod/Settings/StaticFiles.hs
 ##
 # Revert configuration to elm-reactor ready
 ##
-cp -f src/ServerConfig.test src/ServerConfig.elm
+cp -f src/StaticConfig.test src/StaticConfig.elm

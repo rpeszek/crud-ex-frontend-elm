@@ -13,7 +13,7 @@ import Thing.List.Logic as Logic
 
 
 initCmd : Cmd Logic.Msg
-initCmd = CmdE.pure <| MsgS.Init 
+initCmd = CmdE.pure <| MsgS.InitMsg 
 
 main = Html.program
     { 

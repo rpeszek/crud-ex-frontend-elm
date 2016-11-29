@@ -1,8 +1,8 @@
 module Thing.Routes exposing (..)
 
 import Thing.Model exposing (ThingId)
-import ServerConfig exposing (serverBase)
- 
+import StaticConfig exposing (serverBase)
+
 -- serverBase = "http://localhost:3000"
 
 thingsR : String

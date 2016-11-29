@@ -9,7 +9,7 @@ import Routing.Logic as RoutingModule
 import Reuse.CmdExtras as CmdE
 import Routing.ElmRoute as ElmRoute
 
-
+ 
 thingConfig : ThingModule.UpdateConf
 thingConfig = {
    editExitCmd = (\maybeTId -> case maybeTId of 
@@ -22,12 +22,12 @@ thingConfig = {
  , listToCreateCmd = ElmRoute.navigateTo ElmRoute.CreateThingR }
 
 update : App.Msg -> App.Model -> (App.Model, Cmd App.Msg)
-update msg model = case Debug.log "App Msg" msg of
+update msg model = case msg of
    App.RoutingModuleMsg innerMsg -> case innerMsg of
       RoutingModule.RouteMsg elmRoute ->
-          (App.setRoute elmRoute model, CmdE.pure <| Debug.log "dispatchTo" <| Dispatch.dispatch elmRoute)
+          (App.setRoute elmRoute model, CmdE.pure <| Dispatch.dispatch elmRoute)
       RoutingModule.UnknownRouteMsg url -> 
-          (App.setRouteErr url model, CmdE.pure <| Debug.log "dispatchErr" <| Dispatch.dispatch ElmRoute.defaultRoute )
+          (App.setRouteErr url model, CmdE.pure <| Dispatch.dispatch ElmRoute.defaultRoute )
    App.ThingModuleMsg innerMsg ->
           let (thingModel, thingCmd) = ThingModule.update thingConfig innerMsg model.thingM 
           in (App.setThingM thingModel model, Cmd.map App.ThingModuleMsg thingCmd)

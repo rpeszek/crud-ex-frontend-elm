@@ -15,14 +15,32 @@
                 </div>
         </body>
 
-        
+      
         <script type="text/javascript" src="/_compile/src/App/Main.elm"></script>
 
         <script type="text/javascript">
                 while (document.body.firstChild) {
                         document.body.removeChild(document.body.firstChild);
                 }
-                runElmProgram();
+                var conf = {
+                    logConfig : {
+                        on: true
+                      , logUpdateOn: true
+                      , logViewOn: false
+                      , logInitOn: true
+                      , logNavOn: true
+                      , logNavLocOn: true
+                      , logMsgOn: true
+                      , logModelOn: false
+                      , logInputOn: true
+                      , logOutputOn: true
+                      , logHtmlOn: false
+                      , logSubOn: false
+                      , logFlagsOn: true
+                    }
+                  , layout : "TEST"
+                 }
+                runElmProgram(conf);
         </script>
 
 </html>

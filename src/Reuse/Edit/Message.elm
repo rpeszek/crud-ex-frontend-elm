@@ -7,7 +7,7 @@ import Reuse.Model.ModelEntity exposing (ModelEntity)
 
 -- model and msg are inner, eg. ThingMsg, Thing
 type EditMsg model msg = 
-    Init (Maybe Int)
+    InitMsg (Maybe Int)
     | InnerMsg msg
     | SaveRequest
     | CancelRequest
@@ -28,16 +28,13 @@ type alias UpdateConfig model msg = {
   , exitCmd : Maybe Int -> Cmd (EditMsg model msg)
 }
 
-debug : String -> a -> a
-debug = Debug.log 
-
 updateEditModel :  UpdateConfig model msg ->
                    EditMsg model msg -> 
                    ModelS.ModelPlus model -> 
                    (ModelS.ModelPlus model, Cmd (EditMsg model msg))
 
 updateEditModel updateConf msg model = case msg of
-    Init initMaybeId -> case initMaybeId of
+    InitMsg initMaybeId -> case initMaybeId of
          Just modelId ->
               (ModelS.initExistingModel modelId updateConf.empty, 
                                  Cmd.map GetHttpResult <| updateConf.getModel modelId)
@@ -45,31 +42,31 @@ updateEditModel updateConf msg model = case msg of
               (ModelS.initNewModel updateConf.empty, Cmd.none)
     GetHttpResult getModelMsg -> case getModelMsg of 
          HttpS.HttpResOk HttpS.HttpGET newInnerModel ->
-            debug "GetResOK " (ModelS.setModel newInnerModel model, Cmd.none)
+            (ModelS.setModel newInnerModel model, Cmd.none)
          HttpS.HttpResErr HttpS.HttpGET msg error ->
             -- let _ = Debug.log "error" err
-            debug ("GetResErr " ++ toString error) (ModelS.setErr msg (Just error) model, Cmd.none)
+            (ModelS.setErr msg (Just error) model, Cmd.none)
     PutHttpResult getModelMsg -> case getModelMsg of 
          HttpS.HttpResOk HttpS.HttpPUT newInnerModel ->
-            debug "PutResOk " (ModelS.setModel newInnerModel model, updateConf.exitCmd model.id)
+            (ModelS.setModel newInnerModel model, updateConf.exitCmd model.id)
          HttpS.HttpResErr HttpS.HttpPUT msg error ->
-            debug ("PutResErr " ++ toString error) (ModelS.setErr msg (Just error) model, Cmd.none)
+            (ModelS.setErr msg (Just error) model, Cmd.none)
     PostHttpResult getModelMsg -> case getModelMsg of 
          HttpS.HttpResOk HttpS.HttpPOST newInnerModelEntity ->
-            debug "PostResOk " ({model | model = newInnerModelEntity.entity, id = Just newInnerModelEntity.id}, updateConf.exitCmd model.id)
+            ({model | model = newInnerModelEntity.entity, id = Just newInnerModelEntity.id}, updateConf.exitCmd model.id)
          HttpS.HttpResErr HttpS.HttpPOST msg error ->
-            debug ("PostResErr " ++ toString error) (ModelS.setErr msg (Just error) model, Cmd.none)
+            (ModelS.setErr msg (Just error) model, Cmd.none)
     SaveRequest -> case updateConf.validate model.model of
          Ok validatedInnerModel ->
            case model.id of
              Just modelId -> 
-                debug "SaveReq " (ModelS.setModel validatedInnerModel model, Cmd.map PutHttpResult <| updateConf.putModel modelId validatedInnerModel)
+                (ModelS.setModel validatedInnerModel model, Cmd.map PutHttpResult <| updateConf.putModel modelId validatedInnerModel)
              Nothing ->
-                debug "CreateReq " (ModelS.setModel validatedInnerModel model, Cmd.map PostHttpResult <| updateConf.postModel validatedInnerModel)
+                (ModelS.setModel validatedInnerModel model, Cmd.map PostHttpResult <| updateConf.postModel validatedInnerModel)
          Err errMsg ->
              Debug.log "validation err" (ModelS.setErr errMsg Nothing model, Cmd.none)
     CancelRequest -> 
-            debug "CancelReq" (model, updateConf.exitCmd model.id)
+            (model, updateConf.exitCmd model.id)
     InnerMsg innerMsg -> 
             let (newInnerModel, cmd) = updateConf.innerUpdate innerMsg model.model
             in (ModelS.setModel newInnerModel model, cmd)

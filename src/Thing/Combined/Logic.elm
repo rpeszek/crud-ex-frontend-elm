@@ -6,9 +6,9 @@ import Thing.List.Logic as List
 
 -- combo message (all messages used by Thing component)
 type Msg = 
-      Edit Edit.Msg 
-    | Read Read.Msg 
-    | List List.Msg  
+      EditMsg Edit.Msg 
+    | ReadMsg Read.Msg 
+    | ListMsg List.Msg  
 
 type alias Model = {
    editM : Edit.Model
@@ -36,12 +36,12 @@ update : UpdateConf ->
          (Model, Cmd Msg)
 
 update config msg model = case msg of
-    Edit innerMsg -> 
+    EditMsg innerMsg -> 
         let (newInnerM, newCmd) = Edit.update config.editExitCmd innerMsg model.editM
-        in ({model | editM = newInnerM}, Cmd.map Edit newCmd)
-    Read innerMsg ->
+        in ({model | editM = newInnerM}, Cmd.map EditMsg newCmd)
+    ReadMsg innerMsg ->
         let (newInnerM, newCmd) = Read.update config.readToEditCmd config.readToExitCmd innerMsg model.readM
-        in ({model | readM = newInnerM}, Cmd.map Read newCmd)
-    List innerMsg ->
+        in ({model | readM = newInnerM}, Cmd.map ReadMsg newCmd)
+    ListMsg innerMsg ->
         let (newInnerM, newCmd) = List.update config.listToViewCmd config.listToCreateCmd innerMsg model.listM
-        in ({model | listM = newInnerM}, Cmd.map List newCmd)
+        in ({model | listM = newInnerM}, Cmd.map ListMsg newCmd)

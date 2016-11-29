@@ -3,9 +3,25 @@ module App.Model exposing (..)
 import Thing.Combined.Logic as ThingModule
 import Routing.Logic as RoutingModule
 import Routing.ElmRoute exposing (ElmRoute)
+import Util.Logger as Logger
+
+type alias AppConfig = {
+    logConfig : Logger.LoggerConfig
+  , layout : String
+ }
+
+initAppConfig : AppConfig 
+initAppConfig = {
+    logConfig = Logger.defaultConfig
+  , layout = "TODO"
+ }
+
+appConfigToLoggerConfig : AppConfig -> Logger.LoggerConfig
+appConfigToLoggerConfig m = m.logConfig
 
 type alias Model = {
-    routeM : RoutingModule.Model
+    appConfigM : AppConfig
+  , routeM : RoutingModule.Model
   , thingM : ThingModule.Model } 
 
 setRoute : ElmRoute -> Model -> Model 
@@ -17,5 +33,11 @@ setRouteErr url model = {model | routeM = RoutingModule.setErr url model.routeM}
 setThingM : ThingModule.Model -> Model -> Model 
 setThingM thingM model = {model | thingM = thingM}
 
-initModel : Model
-initModel = {routeM = RoutingModule.initModel, thingM = ThingModule.initModel}
+setAppConfig : AppConfig -> Model -> Model 
+setAppConfig appConf model = {model | appConfigM = appConf}
+
+initModel : AppConfig -> Model
+initModel appConfig = {appConfigM = appConfig, routeM = RoutingModule.initModel, thingM = ThingModule.initModel}
+
+getLoggerConfig : Model -> Logger.LoggerConfig
+getLoggerConfig model = model.appConfigM.logConfig

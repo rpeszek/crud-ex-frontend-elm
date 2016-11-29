@@ -10,7 +10,7 @@ import Reuse.Model.ModelPlus as ModelS
 import Reuse.Edit.Message as MsgS
 
 initCmd : Cmd Logic.Msg
-initCmd = CmdE.pure <| MsgS.Init <| Nothing
+initCmd = CmdE.pure <| MsgS.InitMsg <| Nothing
 
 main = Html.program
     { 

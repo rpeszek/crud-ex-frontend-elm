@@ -1,7 +1,7 @@
 {
     "version": "0.1.0",
     "summary": "CRUD elm frontend example",
-    "repository": "https://github.com/elm-lang/elm-architecture-tutorial.git",
+    "repository": "https://github.com/rpeszek/crud-ex-frontend-elm.git",
     "license": "MIT",
     "source-directories": [
         "src"

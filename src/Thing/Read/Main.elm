@@ -14,12 +14,12 @@ testId : Int
 testId = 1
 
 initCmd : Cmd Logic.Msg
-initCmd = CmdE.pure <| MsgS.Init <| testId
+initCmd = CmdE.pure <| MsgS.InitMsg <| testId
 
 main = Html.program
     { 
       -- model in init is not important 
-      -- it is replaced when Init message is processed
+      -- it is replaced when InitMsg message is processed
       init = (Logic.initModel, initCmd)
     , update = Logic.update (always Cmd.none) (always Cmd.none)
     , view = ReadView.view

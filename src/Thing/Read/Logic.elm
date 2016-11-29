@@ -11,7 +11,7 @@ type alias Msg = MsgS.ReadMsg Thing ()
 type alias Model = ModelS.ModelPlus Thing
 
 -- model in init is not important 
--- it is replaced when Init message is processed
+-- it is replaced when InitMsg message is processed
 initModel : Model
 initModel = {id = Just -1, model = emptyThing, err = Nothing}
 

@@ -12,10 +12,10 @@ import Reuse.Read.Message as Read
 dispatch : ElmRoute -> App.Msg
 dispatch elmRoute = case elmRoute of
          ListThingsR -> 
-              App.ThingModuleMsg <| ThingModule.List <| List.Init
+              App.ThingModuleMsg <| ThingModule.ListMsg <| List.InitMsg
          CreateThingR ->
-              App.ThingModuleMsg <| ThingModule.Edit <| Edit.Init Nothing
+              App.ThingModuleMsg <| ThingModule.EditMsg <| Edit.InitMsg Nothing
          ViewThingR tid ->
-              App.ThingModuleMsg <| ThingModule.Read <| Read.Init tid
+              App.ThingModuleMsg <| ThingModule.ReadMsg <| Read.InitMsg tid
          EditThingR tid ->
-              App.ThingModuleMsg <| ThingModule.Edit <| Edit.Init <| Just tid
+              App.ThingModuleMsg <| ThingModule.EditMsg <| Edit.InitMsg <| Just tid
