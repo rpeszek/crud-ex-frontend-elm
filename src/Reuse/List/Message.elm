@@ -1,7 +1,7 @@
 module Reuse.List.Message exposing (..)
 
 import Platform.Cmd as Cmd
-import Reuse.Http as HttpS
+import Util.Http as HttpS
 import Reuse.Model.ModelEntity as ModelS
 
 
@@ -16,7 +16,7 @@ type ListMsg model msg =
 type alias UpdateConfig model msg = {
     getModels : Cmd (HttpS.HttpRes HttpS.HttpGET (List (ModelS.ModelEntity model)))
   , viewCommand : Int -> Cmd (ListMsg model msg)
-  , createCommand : Cmd (ListMsg model msg)
+  , createCommand : () -> Cmd (ListMsg model msg)
 }
 
 updateListModel : UpdateConfig model msg -> 
@@ -36,6 +36,6 @@ updateListModel updateConf msg model = case msg of
     ViewRequest modelId -> 
             (model, updateConf.viewCommand modelId)
     CreateRequest  -> 
-            (model, updateConf.createCommand)
+            (model, updateConf.createCommand ())
   
     

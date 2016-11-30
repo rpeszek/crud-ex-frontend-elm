@@ -1,4 +1,4 @@
-module Thing.Routes exposing (..)
+module ServerRoutes exposing (..)
 
 import Thing.Model exposing (ThingId)
 import StaticConfig exposing (serverBase)

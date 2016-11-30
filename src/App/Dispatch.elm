@@ -2,7 +2,7 @@ module App.Dispatch exposing (..)
 
 import String
 import App.Message as App
-import Routing.ElmRoute exposing (..)
+import ElmRoutes exposing (..)
 import UrlParser exposing (..)
 import Thing.Combined.Logic as ThingModule
 import Reuse.List.Message as List

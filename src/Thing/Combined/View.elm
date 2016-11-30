@@ -3,7 +3,7 @@ module Thing.Combined.View exposing (..)
 import Html exposing (..)
 import Html.App as Html
 import Html.Attributes exposing (..)
-import Routing.ElmRoute exposing (ElmRoute(..))
+import ElmRoutes exposing (ElmRoute(..))
 import Thing.Combined.Logic as Logic 
 import Thing.Edit.View as Edit
 import Thing.Read.View as Read

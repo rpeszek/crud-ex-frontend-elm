@@ -1,4 +1,4 @@
-module Reuse.CmdExtras exposing (..)
+module Util.CmdExtras exposing (..)
 
 import Task
 

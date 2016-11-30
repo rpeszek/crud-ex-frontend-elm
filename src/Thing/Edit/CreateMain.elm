@@ -5,7 +5,7 @@ import Task
 import Thing.Edit.Logic as Logic
 import Thing.Edit.View as EditView
 import Html.App as Html
-import Reuse.CmdExtras as CmdE
+import Util.CmdExtras as CmdE
 import Reuse.Model.ModelPlus as ModelS
 import Reuse.Edit.Message as MsgS
 

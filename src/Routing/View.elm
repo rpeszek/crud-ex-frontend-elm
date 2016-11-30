@@ -4,7 +4,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Routing.Logic as Logic
 import Reuse.Common.View as ViewC
-import Routing.ElmRoute as ElmR exposing (ElmRoute(..))
+import ElmRoutes as ElmR exposing (ElmRoute(..))
 
 view : Logic.Model -> Html Logic.Msg
 view model = div [] <| viewRoute model.route ++ viewRouteErr model.err

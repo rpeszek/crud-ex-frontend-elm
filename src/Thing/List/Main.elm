@@ -4,7 +4,7 @@ import Task
 
 import Thing.Model as BaseModel
 import Html.App as Html
-import Reuse.CmdExtras as CmdE
+import Util.CmdExtras as CmdE
 import Thing.List.View as ListView
 import Reuse.Model.ModelEntity as ModelS
 import Reuse.List.Message as MsgS

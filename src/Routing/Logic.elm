@@ -1,6 +1,6 @@
 module Routing.Logic exposing (..)
 
-import Routing.ElmRoute as ElmRoute
+import ElmRoutes as ElmRoute
 
 type alias Model = {
     route : ElmRoute.ElmRoute  -- defaulted if error

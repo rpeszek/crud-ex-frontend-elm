@@ -5,7 +5,7 @@ import App.Model exposing (Model, AppConfig, initModel, getLoggerConfig, appConf
 import App.Message exposing (Msg)
 import App.View exposing (view)
 import App.Logic as Logic
-import Reuse.CmdExtras as CmdE
+import Util.CmdExtras as CmdE
 import Util.Logger as Logger
 import Util.Logger.NavProgram as Program
 

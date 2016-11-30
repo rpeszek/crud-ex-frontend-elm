@@ -1,4 +1,4 @@
-module Reuse.Http exposing (..)
+module Util.Http exposing (..)
 
 import Task exposing (Task)
 import Http

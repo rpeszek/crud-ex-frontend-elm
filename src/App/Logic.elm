@@ -6,8 +6,8 @@ import App.Model as App
 import App.Dispatch as Dispatch
 import Thing.Combined.Logic as ThingModule
 import Routing.Logic as RoutingModule
-import Reuse.CmdExtras as CmdE
-import Routing.ElmRoute as ElmRoute
+import Util.CmdExtras as CmdE
+import ElmRoutes as ElmRoute
 
  
 thingConfig : ThingModule.UpdateConf
@@ -19,7 +19,7 @@ thingConfig = {
  , readToEditCmd = (\tId -> ElmRoute.navigateTo <| ElmRoute.EditThingR tId)
  , readToExitCmd = (\_ -> ElmRoute.navigateTo ElmRoute.ListThingsR)
  , listToViewCmd = (\tId -> ElmRoute.navigateTo <| ElmRoute.ViewThingR tId )
- , listToCreateCmd = ElmRoute.navigateTo ElmRoute.CreateThingR }
+ , listToCreateCmd = (\_ -> ElmRoute.navigateTo ElmRoute.CreateThingR) }
 
 update : App.Msg -> App.Model -> (App.Model, Cmd App.Msg)
 update msg model = case msg of

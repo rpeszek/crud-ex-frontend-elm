@@ -21,4 +21,4 @@ touch ../crud-ex-backend-yesod/Settings/StaticFiles.hs
 ##
 # Revert configuration to elm-reactor ready
 ##
-cp -f src/StaticConfig.test src/StaticConfig.elm
+cp -f src/StaticConfig.reactor src/StaticConfig.elm

@@ -39,7 +39,9 @@ defaultConfig = {
   , logFlagsOn = True
  }
 
-
+--
+-- TODO try to rethink this, this version is kinda ugly
+--
 
 logModel : LoggerConfig -> String -> model -> model
 logModel config logMsg = 

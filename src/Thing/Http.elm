@@ -3,8 +3,8 @@ module Thing.Http exposing (..)
 import Http
 import Task
 import Json.Decode as Json
-import Reuse.Http as HttpS
-import Thing.Routes exposing (..)
+import Util.Http as HttpS
+import ServerRoutes exposing (..)
 import Thing.Model as Model
 
 

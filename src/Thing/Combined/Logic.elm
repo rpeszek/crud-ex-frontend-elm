@@ -27,7 +27,7 @@ type alias UpdateConf = {
  , readToEditCmd : (Int -> Cmd Read.Msg)
  , readToExitCmd : (Int -> Cmd Read.Msg)
  , listToViewCmd : (Int -> Cmd List.Msg)
- , listToCreateCmd : Cmd List.Msg
+ , listToCreateCmd : (() -> Cmd List.Msg)
 }
 
 update : UpdateConf -> 

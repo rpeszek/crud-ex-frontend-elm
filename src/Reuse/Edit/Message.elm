@@ -1,7 +1,7 @@
 module Reuse.Edit.Message exposing (..)
 
 import Platform.Cmd as Cmd
-import Reuse.Http as HttpS
+import Util.Http as HttpS
 import Reuse.Model.ModelPlus as ModelS
 import Reuse.Model.ModelEntity exposing (ModelEntity)
 

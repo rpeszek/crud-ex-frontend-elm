@@ -2,7 +2,7 @@ module Thing.Edit.Logic exposing (..)
 
 import Thing.Model exposing (Thing, emptyThing)
 import Thing.Http as ThingHttp
-import Reuse.Http as HttpS
+import Util.Http as HttpS
 import Reuse.Model.ModelPlus as ModelS
 import Reuse.Edit.Message as MsgS 
 

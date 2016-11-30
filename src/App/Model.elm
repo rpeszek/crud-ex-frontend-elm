@@ -2,7 +2,7 @@ module App.Model exposing (..)
 
 import Thing.Combined.Logic as ThingModule
 import Routing.Logic as RoutingModule
-import Routing.ElmRoute exposing (ElmRoute)
+import ElmRoutes exposing (ElmRoute)
 import Util.Logger as Logger
 
 type alias AppConfig = {

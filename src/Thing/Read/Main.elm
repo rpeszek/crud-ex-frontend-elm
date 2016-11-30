@@ -3,7 +3,7 @@ module Thing.Edit.EditMain exposing (..)
 import Task
 
 import Html.App as Html
-import Reuse.CmdExtras as CmdE
+import Util.CmdExtras as CmdE
 import Thing.Read.View as ReadView
 import Reuse.Model.ModelPlus as ModelS
 import Reuse.Read.Message as MsgS

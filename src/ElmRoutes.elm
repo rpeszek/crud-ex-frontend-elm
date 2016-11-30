@@ -1,4 +1,4 @@
-module Routing.ElmRoute exposing (..)
+module ElmRoutes exposing (..)
 
 import String
 import Navigation as Nav
