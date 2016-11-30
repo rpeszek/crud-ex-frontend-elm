@@ -6,9 +6,12 @@ __Goals:__
    * Server-side typed Web API
    * Client-side typed dispatch/API using hash URL fragments
 * Following TEA architecture closely
+* Independent components testable in isolation and agnostic of each other 
 * CRUD code reuse across crud-ed entities
 * Minimize styling decisions on Entity level (keep them reusable)
 * Almost-SPA (large page scopes), SPA ready design.
+
+See also: [Naming Conventions/Code Review](README_CODE_REVIEW.md)
 
 __TODO List:__  
 * Server configuration of elm programs
