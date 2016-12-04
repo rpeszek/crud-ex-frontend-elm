@@ -20,9 +20,14 @@ programWithFlags :  Nav.Parser data
     -> ProgramLogic flags data model msg
     -> Program flags
 programWithFlags parser logic = Nav.programWithFlags parser
-    {  init = navInitWithLogging logic.flagsToLoggerConf "app" logic.init
-      , view = viewWithLogging logic.modelToLoggerConf "app" logic.view
-      , update = updateWithLogging logic.modelToLoggerConf "app" logic.update
-      , urlUpdate = navUpdateWithLogging logic.modelToLoggerConf "app" logic.urlUpdate
-      , subscriptions = subWithLoging logic.modelToLoggerConf "app" logic.subscriptions
+    {  init = log3a Std LInit logic.flagsToLoggerConf (describeInput LFlags) (describeInput LNavLoc) describeOutputModelAndCmd
+                   <| logic.init
+      , view = log2 Std LView logic.modelToLoggerConf (describeInput LModel) describeOutputHtml 
+                   <| logic.view
+      , update = log3b Std LUpdate logic.modelToLoggerConf (describeInput LModel) (describeInput LMsg) describeOutputModelAndCmd
+                   <| logic.update
+      , urlUpdate = log3b Std LNav logic.modelToLoggerConf (describeInput LNavLoc) (describeInput LModel) describeOutputModelAndCmd
+                   <| logic.urlUpdate
+      , subscriptions = log2 Std LSub logic.modelToLoggerConf (describeInput LModel) describeOutputSubscription
+                   <| logic.subscriptions
      }

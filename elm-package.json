@@ -12,7 +12,6 @@
         "elm-lang/html": "1.0.0 <= v < 2.0.0",
         "evancz/elm-http": "3.0.1 <= v < 4.0.0",
         "evancz/elm-markdown": "3.0.0 <= v < 4.0.0",
-        "jinjor/elm-time-travel": "1.0.17 <= v < 1.1.0",
         "benthepoet/elm-purecss": "1.0.1 <= v < 1.1.1",
         "NoRedInk/elm-decode-pipeline": "2.0.0 <= v < 3.0.1",
         "elm-lang/navigation": "1.0.0 <= v < 3.0.0",

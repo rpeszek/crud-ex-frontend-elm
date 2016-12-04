@@ -8,18 +8,18 @@ __Goals:__
 * Following TEA architecture closely
 * Independent components testable in isolation and agnostic of each other 
 * CRUD code reuse across crud-ed entities
-* Minimize styling decisions on Entity level (keep them reusable)
-* Almost-SPA (large page scopes), SPA ready design.
+* Minimize styling decisions on entity level (keep them reusable)
+* Almost-SPA (large page scopes), SPA ready design
+* Customizable logging of elm runtime interactions
 
 See also: [Naming Conventions/Code Review](README_CODE_REVIEW.md)
 
 __TODO List:__  
-* Server configuration of elm programs
-* Better logging
-* Add has-many relationship to example CRUD
-* Add owner/user (server defined, elm displayed)
-* List pagination support
 * Convert to Elm v.0.18 (from .17)
+* Integrate server user/owner/security
+* List pagination support
+* Add has-many relationship to example CRUD
+* Logging as UI component
 * Keep rethinking styling and views
 * Improve validation
 

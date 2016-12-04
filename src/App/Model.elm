@@ -4,20 +4,35 @@ import Thing.Combined.Logic as ThingModule
 import Routing.Logic as RoutingModule
 import ElmRoutes exposing (ElmRoute)
 import Util.Logger as Logger
+import Util.Logger.Json as LoggerJson
+import Json.Decode as Json
 
 type alias AppConfig = {
     logConfig : Logger.LoggerConfig
   , layout : String
  }
 
+type alias AppFlags = {
+    logConfig : Json.Value
+  , layout : String
+ }
+
 initAppConfig : AppConfig 
 initAppConfig = {
-    logConfig = Logger.defaultConfig
+    logConfig = Logger.defaultLoggerConf
   , layout = "TODO"
  }
 
-appConfigToLoggerConfig : AppConfig -> Logger.LoggerConfig
-appConfigToLoggerConfig m = m.logConfig
+appFlagsToLoggerConfig : AppFlags -> Logger.LoggerConfig
+appFlagsToLoggerConfig flags = 
+    let result = Json.decodeValue LoggerJson.loggerConfigDecoder flags.logConfig
+    in case result of 
+       Ok config ->  config
+       Err msg   ->  Debug.log ("Error Parsing Flags" ++ msg) Logger.defaultLoggerConf
+     
+
+appFlagsToAppConfig : AppFlags -> AppConfig
+appFlagsToAppConfig flags = {logConfig = appFlagsToLoggerConfig flags, layout = flags.layout} 
 
 type alias Model = {
     appConfigM : AppConfig
@@ -36,8 +51,8 @@ setThingM thingM model = {model | thingM = thingM}
 setAppConfig : AppConfig -> Model -> Model 
 setAppConfig appConf model = {model | appConfigM = appConf}
 
-initModel : AppConfig -> Model
-initModel appConfig = {appConfigM = appConfig, routeM = RoutingModule.initModel, thingM = ThingModule.initModel}
+initModel : AppFlags -> Model
+initModel appFlags = {appConfigM = appFlagsToAppConfig appFlags, routeM = RoutingModule.initModel, thingM = ThingModule.initModel}
 
 getLoggerConfig : Model -> Logger.LoggerConfig
 getLoggerConfig model = model.appConfigM.logConfig

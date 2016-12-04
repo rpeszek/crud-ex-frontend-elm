@@ -2,157 +2,155 @@ module Util.Logger exposing (..)
 
 import Html exposing (Html)
 import Html.App as Html
+import String
 
+type LoggerFlag = 
+     LApp 
+   | LIn 
+   | LOut 
+   | LUpdate
+   | LView
+   | LInit 
+   | LNav 
+   | LMsg 
+   | LModel 
+   | LNavLoc  -- like Nav model
+   | LHtml 
+   | LSub 
+   | LFlags 
+
+type LoggerLevel = 
+      Info
+    | Std
+    | Crit
+   
 type alias LoggerConfig = {
-    on: Bool
-  , logUpdateOn: Bool
-  , logViewOn: Bool
-  , logInitOn: Bool
-  , logNavOn: Bool
-  , logNavLocOn: Bool -- like Nav model
-  , logMsgOn: Bool
-  , logModelOn: Bool
-  , logInputOn: Bool
-  , logOutputOn: Bool
-  , logHtmlOn: Bool
-  , logSubOn: Bool
-  , logFlagsOn: Bool
-}
- 
---
--- For static use, not used with programWithFlags
---
-defaultConfig : LoggerConfig
-defaultConfig = {
-   on = True
-  , logUpdateOn = True
-  , logViewOn = False
-  , logInitOn = True
-  , logNavOn = False
-  , logNavLocOn = True -- like Nav model
-  , logMsgOn = True
-  , logModelOn = True
-  , logInputOn = True
-  , logOutputOn = True
-  , logHtmlOn = False
-  , logSubOn = False
-  , logFlagsOn = True
+    logLevel : LoggerLevel
+  , logFlags : List LoggerFlag
  }
 
---
--- TODO try to rethink this, this version is kinda ugly
---
+defaultLoggerConf : LoggerConfig
+defaultLoggerConf = {
+    logLevel = Std
+  , logFlags = [LApp, LInit, LOut, LIn] 
+ }
 
-logModel : LoggerConfig -> String -> model -> model
-logModel config logMsg = 
-      logIfOn config.logModelOn (logMsg ++ ":model")
+testLoggerConf : LoggerConfig
+testLoggerConf = {
+    logLevel = Info
+  , logFlags = [LApp, LInit, LUpdate, LOut, LIn, LMsg, LModel]  
+ }
 
-logMsg : LoggerConfig -> String -> msg -> msg
-logMsg config logMsg = 
-      logIfOn config.logMsgOn (logMsg ++ ":msg")
-
-
-logNavLoc : LoggerConfig -> String -> data -> data
-logNavLoc config logMsg = 
-      logIfOn config.logNavLocOn (logMsg ++ ":navL")
-
-
-logFlags : LoggerConfig -> String -> flags -> flags
-logFlags config logMsg = 
-      logIfOn config.logFlagsOn (logMsg ++ ":flags")
-
-logModelAndCmd : LoggerConfig -> String -> (model, Cmd msg) -> (model, Cmd msg)
-logModelAndCmd config txt (model, cmd) = 
-          (logModel config txt model, Cmd.map (logMsg config txt) cmd)
-
-
-logHtml : LoggerConfig -> String -> Html msg -> Html msg
-logHtml config txt html = 
-          if config.logHtmlOn 
-          then Debug.log (txt ++ ":html") html
-          else Html.map (Debug.log (txt ++ ":html.msg")) html  -- traces user triggered outgoing Msg
+levelToInt : LoggerLevel -> Int 
+levelToInt level = case level of
+      Info -> 1
+      Std  -> 2
+      Crit -> 3
 
 --
---  would that be more elegant with (Function.map << Function.map) or (<<) << (<<) (return side)
+-- Logger components
 --
-updateWithLogging : (model -> LoggerConfig) -> String -> (msg -> model -> (model, Cmd msg)) -> msg -> model -> (model, Cmd msg)
-updateWithLogging configF txt_ = 
-        let txt = txt_ ++ ":update" 
-            logic updateF = 
-               (\msg model -> 
-                 let config = configF model 
-                 in if config.on && config.logUpdateOn
-                    then logicIfOn config.logOutputOn (logModelAndCmd config (txt ++ ":out" )) 
-                       <| updateF (logicIfOn config.logInputOn (logMsg config (txt ++ ":in")) msg) (logicIfOn config.logInputOn (logModel config (txt ++ ":in")) model)
-                    else updateF msg model)
-        in logic 
 
-viewWithLogging : (model -> LoggerConfig) ->  String -> (model -> Html msg) -> model -> Html msg
-viewWithLogging configF txt_ = 
-        let  txt = txt_ ++ ":view" 
-             logic viewF = (\model ->
-                 let config = configF model 
-                 in if config.on && config.logViewOn
-                    then logicIfOn config.logOutputOn (logHtml config (txt ++ ":out" )) 
-                            <| viewF 
-                            <| logicIfOn config.logInputOn (logModel config (txt ++ ":in")) model 
-                    else viewF model ) 
-        in logic 
-        
+describeElement : List LoggerFlag -> List LoggerFlag -> LoggerConfig -> a -> a 
+describeElement logFlags_ stack config = 
+               if shouldLogItem logFlags_ config 
+               then Debug.log (logMsgP <| logFlags_ ++ stack)
+               else identity
 
--- init : Logic.RouteData -> (Model, Cmd Msg)
-navInitWithLogging : (flags -> LoggerConfig) -> String -> (flags -> loc -> (model, Cmd msg)) -> flags -> loc -> (model, Cmd msg)
-navInitWithLogging configF txt_ = 
-        let txt = txt_ ++ ":init" 
-            logic initF = 
-                (\flags loc -> 
-                   let config = configF flags
-                   in if config.on && config.logInitOn
-                      then logicIfOn config.logOutputOn (logModelAndCmd config (txt ++ ":out" )) 
-                                 <| initF (logicIfOn config.logFlagsOn (logFlags config (txt ++ ":in")) flags) (logicIfOn config.logInputOn (logNavLoc config (txt ++ ":in")) loc)
-                      else initF flags loc
-                 )
-        in logic 
+describeInput : LoggerFlag -> List LoggerFlag -> LoggerConfig -> a -> a 
+describeInput flag = describeElement [flag, LIn] 
 
-navUpdateWithLogging : (model -> LoggerConfig) -> String -> (data -> model -> (model, Cmd msg)) -> data -> model -> (model, Cmd msg)
-navUpdateWithLogging configF txt_ = 
-        let txt = txt_ ++ ":urlUpdate" 
-            logic updateF = (\msg model -> 
-                   let config = configF model
-                   in if config.on && config.logNavOn
-                      then logicIfOn config.logOutputOn (logModelAndCmd config (txt ++ ":out" )) 
-                              <| updateF (logicIfOn config.logInputOn (logNavLoc config (txt ++ ":in")) msg) (logicIfOn config.logInputOn (logModel config (txt ++ ":in")) model)
-                      else updateF msg model )
-        in logic 
+describeOutput : LoggerFlag -> List LoggerFlag -> LoggerConfig -> a -> a 
+describeOutput flag = describeElement [flag, LOut] 
 
-subWithLoging : (model -> LoggerConfig) -> String -> (model -> Sub msg) -> model -> Sub msg
-subWithLoging configF txt_ = 
-        let  txt = txt_ ++ ":sub" 
-             logic subF = (\model ->
-                   let config = configF model
-                   in if config.on && config.logSubOn
-                      then logicIfOn config.logOutputOn (Sub.map (Debug.log (txt ++ ".msg"))) 
-                            <| subF 
-                            <| logicIfOn config.logInputOn (logModel config (txt ++ ":in")) model
-                      else subF model
-                ) 
-        in logic 
+describeOutputModelAndCmd :  List LoggerFlag -> LoggerConfig -> (model, Cmd msg) -> (model, Cmd msg)
+describeOutputModelAndCmd stack config (model, cmd) = 
+        let logFlags_ = [LOut]
+        in if shouldLogItem logFlags_ config 
+           then let allFlags = (logFlags_ ++ stack)
+                in (describeElement [LModel] allFlags config model, Cmd.map (describeElement [LMsg] allFlags config) cmd)
+           else (model, cmd)
 
-------
--- PRIVATE HELPERS (TODO do not export)
-------
+describeOutputSubscription : List LoggerFlag -> LoggerConfig -> Sub msg -> Sub msg
+describeOutputSubscription  stack config sub = 
+        let logFlags_ = [LOut]
+        in if shouldLogItem logFlags_ config
+           then let allFlags = (logFlags_ ++ stack)
+                in Sub.map (describeElement [LSub] allFlags config) sub 
+           else sub
 
-logicIfOn : Bool -> (a -> a) -> a -> a 
-logicIfOn on logic x = 
-        if not on
-        then x
-        else logic x
+describeOutputHtml : List LoggerFlag -> LoggerConfig -> Html msg -> Html msg
+describeOutputHtml stack config sub = 
+        let logFlags_ = [LOut]
+        in if shouldLogItem logFlags_ config
+           then let allFlags = (logFlags_ ++ stack)
+                in Html.map (describeElement [LSub] allFlags config) sub 
+           else sub
 
 --
--- NOTE logIfOn on msg = logicIfOn on (Debug.log msg)
+-- Logger Combinators
 --
-logIfOn : Bool -> String -> a -> a
-logIfOn on logMsg x = 
-    if not on
-    then x
-    else Debug.log logMsg x
+-- NOTE: 
+-- These are intended to be used on 'top level' so no stack input param
+--
+log1 : LoggerLevel -> LoggerFlag -> (a -> LoggerConfig) -> (List LoggerFlag -> LoggerConfig -> a -> a) -> a -> a
+log1 level flag configF aWithLog a =
+            let logFlags_ = [flag, LApp]
+                config = configF a 
+            in if shouldLogLevel level config && shouldLogItem logFlags_ config 
+               then Debug.log (logMsgP logFlags_) a 
+               else a
+
+log2: LoggerLevel -> LoggerFlag -> (a -> LoggerConfig) -> (List LoggerFlag -> LoggerConfig -> a -> a) -> (List LoggerFlag -> LoggerConfig -> b -> b) -> (a -> b) -> a -> b
+log2 level flag configF aWithLog bWithLog fn = 
+           (\a -> 
+                let logFlags_ = [flag, LApp]
+                    config = configF a 
+                in if shouldLogLevel level config && shouldLogItem logFlags_ config  
+                   then bWithLog logFlags_ config <| fn <| aWithLog logFlags_ config <| a
+                   else fn a
+            )
+
+log3a: LoggerLevel -> 
+     LoggerFlag -> 
+     (a -> LoggerConfig) -> 
+     (List LoggerFlag -> LoggerConfig -> a -> a) -> 
+     (List LoggerFlag -> LoggerConfig -> b -> b) -> 
+     (List LoggerFlag -> LoggerConfig -> c -> c) -> 
+     (a -> b -> c) -> a -> b -> c
+log3a level flag configF aWithLog bWithLog cWithLog fn a = 
+              let logFlags_ = [flag, LApp]
+                  config = configF a
+                  aLogged = if shouldLogLevel level config && shouldLogItem logFlags_ config 
+                            then aWithLog logFlags_ config a
+                            else a
+              in log2 level flag (always config) bWithLog cWithLog (fn aLogged)
+
+
+log3b: LoggerLevel -> 
+     LoggerFlag -> 
+     (b -> LoggerConfig) -> 
+     (List LoggerFlag -> LoggerConfig -> a -> a) -> 
+     (List LoggerFlag -> LoggerConfig -> b -> b) -> 
+     (List LoggerFlag -> LoggerConfig -> c -> c) -> 
+     (a -> b -> c) -> a -> b -> c
+log3b level flag configF aWithLog bWithLog cWithLog fn = 
+     flip <| log3a level flag configF bWithLog aWithLog cWithLog (flip fn)
+
+
+--
+-- Implemenation helpers 
+--
+shouldLogLevel : LoggerLevel -> LoggerConfig -> Bool
+shouldLogLevel level config = levelToInt level >= levelToInt config.logLevel
+
+shouldLogItem : List LoggerFlag -> LoggerConfig -> Bool
+shouldLogItem logFlags_ config = List.all (\it -> List.member it config.logFlags) logFlags_
+
+loggerFlagDisplay : LoggerFlag -> String
+loggerFlagDisplay = String.dropLeft 1 << toString
+
+logMsgP : List LoggerFlag -> String
+logMsgP stack = case stack of
+         [] -> ""
+         (x::xs) -> logMsgP xs ++ ":" ++ loggerFlagDisplay x
