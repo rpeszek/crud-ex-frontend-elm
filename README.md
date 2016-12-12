@@ -1,3 +1,5 @@
+This is unmaintained branch that uses Elm v 0.17.  Kept for comparison.
+
 Example/Template frontend CRUD project in Elm.  
 See parent umbrella [typesafe-web-polyglot](https://github.com/rpeszek/typesafe-web-polyglot.git).
 
