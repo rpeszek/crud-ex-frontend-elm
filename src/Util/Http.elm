@@ -24,7 +24,6 @@ put decoder url encoder =
   let request =
         { verb = "PUT"
         , headers = [
-                 ("Origin", "http://localhost:8000/"),
                  ("Content-Type", "application/json; charset=UTF-8")
         ]
         , url = url
