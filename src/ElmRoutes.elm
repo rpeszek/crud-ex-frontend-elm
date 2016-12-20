@@ -26,14 +26,14 @@ navigateTo route = Nav.newUrl <| Debug.log "navigateTo" <| toElmUrl route
 
 routeParser : Parser (ElmRoute -> a) a 
 routeParser = oneOf
-    [ format ListThingsR (s "")
-    , format CreateThingR (s "thingscreate")
-    , format ViewThingR (s "thingsview" </> int)
-    , format EditThingR (s "thingsedit" </> int)
+    [ map ListThingsR top
+    , map CreateThingR (s "thingscreate")
+    , map ViewThingR (s "thingsview" </> int)
+    , map EditThingR (s "thingsedit" </> int)
     ]
 
 parseElmRoute : Nav.Location -> Result String ElmRoute
-parseElmRoute location =
-    location.hash
-        |> String.dropLeft 1
-        |> parse identity routeParser
+parseElmRoute location = case parseHash routeParser location of
+    Just route -> Ok route
+    Nothing -> Err <| "Invalid route " ++ toString location
+  

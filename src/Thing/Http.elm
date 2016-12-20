@@ -13,36 +13,36 @@ getThing tId =
   let
     errMsg = "Error Retrieving Thing " ++ toString tId
     request =
-      Http.get Model.thingJsonDecoder (thingR tId) 
+      Http.get (thingR tId) Model.thingJsonDecoder  
   in
-    Task.perform (HttpS.HttpResErr HttpS.HttpGET errMsg) (HttpS.HttpResOk HttpS.HttpGET) request
+    Http.send (HttpS.resultConverter HttpS.HttpGET errMsg) request
 
 getThings :  Cmd (HttpS.HttpRes HttpS.HttpGET (List Model.ThingEntity))
 getThings  =
   let
     errMsg = "Error Retrieving Things " 
     request =
-      Http.get (Json.list Model.thingEntityJsonDecoder) thingsR 
+      Http.get thingsR (Json.list Model.thingEntityJsonDecoder)  
   in
-    Task.perform (HttpS.HttpResErr HttpS.HttpGET errMsg) (HttpS.HttpResOk HttpS.HttpGET) request
+    Http.send (HttpS.resultConverter HttpS.HttpGET errMsg) request
 
 putThing : Model.ThingId -> Model.Thing -> Cmd (HttpS.HttpRes HttpS.HttpPUT Model.Thing)
 putThing tId thing =
   let
     errMsg = "Error Saving Thing " ++ toString tId ++ ": " ++ toString thing
     request =
-      HttpS.put Model.thingJsonDecoder (thingR tId) (Model.thingJsonEncoder thing)
+      HttpS.put (thingR tId) (Model.thingJsonEncoder thing) Model.thingJsonDecoder
   in
-    Task.perform (HttpS.HttpResErr HttpS.HttpPUT errMsg) (HttpS.HttpResOk HttpS.HttpPUT) request
+    Http.send (HttpS.resultConverter HttpS.HttpPUT errMsg) request
 
 postThing : Model.Thing -> Cmd (HttpS.HttpRes HttpS.HttpPOST Model.ThingEntity)
 postThing thing =
   let
     errMsg = "Error Creating Thing " ++ toString thing
     request =
-      HttpS.post Model.thingEntityJsonDecoder thingsR (Model.thingJsonEncoder thing)
+      HttpS.post thingsR (Model.thingJsonEncoder thing) Model.thingEntityJsonDecoder
   in
-    Task.perform (HttpS.HttpResErr HttpS.HttpPOST errMsg) (HttpS.HttpResOk HttpS.HttpPOST) request
+    Http.send (HttpS.resultConverter HttpS.HttpPOST errMsg) request
 
 deleteThing : Model.ThingId -> Cmd (HttpS.HttpRes HttpS.HttpDELETE ())
 deleteThing tId = 
@@ -51,4 +51,4 @@ deleteThing tId =
     request =
       HttpS.delete (thingR tId)
   in
-    Task.perform (HttpS.HttpResErr HttpS.HttpDELETE errMsg) (HttpS.HttpResOk HttpS.HttpDELETE) request
+    Http.send (HttpS.resultConverter HttpS.HttpDELETE errMsg) request

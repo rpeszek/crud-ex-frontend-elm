@@ -1,0 +1,4 @@
+[submodule "dependencies/elm-purecss"]
+	path = dependencies/elm-purecss
+	url = https://github.com/benthepoet/elm-purecss.git
+	branch = c13311700670f2eafda3922538cb1a823f63ff79

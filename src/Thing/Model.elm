@@ -1,7 +1,7 @@
 module Thing.Model exposing (..)
 
-import Json.Decode exposing (Decoder, int, string, object2)
-import Json.Decode.Pipeline exposing (decode, nullable, required)
+import Json.Decode exposing (Decoder, int, string, nullable)
+import Json.Decode.Pipeline exposing (decode, required)
 import Json.Encode as Encode
 import Reuse.Model.ModelPlus as ModelS
 

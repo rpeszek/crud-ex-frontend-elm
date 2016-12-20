@@ -1,7 +1,6 @@
 module Util.Logger exposing (..)
 
-import Html exposing (Html)
-import Html.App as Html
+import Html as Html exposing (Html)
 import String
 
 type LoggerFlag = 
@@ -27,6 +26,12 @@ type LoggerLevel =
 type alias LoggerConfig = {
     logLevel : LoggerLevel
   , logFlags : List LoggerFlag
+ }
+
+navLoggerConf : LoggerConfig
+navLoggerConf = {
+    logLevel = Std
+  , logFlags = [LApp, LNav, LOut, LIn, LNavLoc, LMsg] 
  }
 
 defaultLoggerConf : LoggerConfig

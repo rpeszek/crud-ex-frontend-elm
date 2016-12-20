@@ -15,13 +15,18 @@ __Goals:__
 See also: [Naming Conventions/Code Review](README_CODE_REVIEW.md)
 
 __TODO List:__  
-* Convert to Elm v.0.18 (from .17)
+* New version of Elm navigation seems to have a mind of its own, figure it out
 * Integrate server user/owner/security
 * List pagination support
 * Add has-many relationship to example CRUD
 * Logging as UI component
-* Keep rethinking styling and views
+* Keep rethinking styling and views 
+   * should I keep using purecss?
 * Improve validation
+
+__Git:__  
+I am using submodules to get dependencies/elm-purecss,  elm-purecss project is not available
+as elm 0.18 package dependency.  
 
 __Backend companion project:__  
 Currently only Yesod implementation: [crud-ex-backend-yesod](https://github.com/rpeszek/crud-ex-backend-yesod.git).

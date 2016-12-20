@@ -26,7 +26,7 @@ config exitCmd = {  innerUpdate = updateThing,
                     exitCmd = exitCmd }
 
 validateThing : Thing -> Result String Thing
-validateThing thing = Ok thing `Result.andThen` validateName `Result.andThen` validateDescription 
+validateThing thing = Ok thing |> Result.andThen validateName |> Result.andThen validateDescription 
 
 validateName : Thing -> Result String Thing
 validateName thing = 

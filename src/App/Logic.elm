@@ -8,9 +8,19 @@ import Thing.Combined.Logic as ThingModule
 import Routing.Logic as RoutingModule
 import Util.CmdExtras as CmdE
 import ElmRoutes as ElmRoute
+import Navigation
 
  
 thingConfig : ThingModule.UpdateConf
+thingConfig = {
+   editExitCmd = always <| Navigation.back 1
+ , readToEditCmd = (\tId -> ElmRoute.navigateTo <| ElmRoute.EditThingR tId)
+ , readToExitCmd = always <| Navigation.back 1
+ , listToViewCmd = (\tId -> ElmRoute.navigateTo <| ElmRoute.ViewThingR tId )
+ , listToCreateCmd = (\_ -> ElmRoute.navigateTo ElmRoute.CreateThingR) }
+
+{-
+--TODO there appears to be bug and cancel triggers two URL updates!
 thingConfig = {
    editExitCmd = (\maybeTId -> case maybeTId of 
                      Just tId ->  ElmRoute.navigateTo <| ElmRoute.ViewThingR tId
@@ -20,6 +30,7 @@ thingConfig = {
  , readToExitCmd = (\_ -> ElmRoute.navigateTo ElmRoute.ListThingsR)
  , listToViewCmd = (\tId -> ElmRoute.navigateTo <| ElmRoute.ViewThingR tId )
  , listToCreateCmd = (\_ -> ElmRoute.navigateTo ElmRoute.CreateThingR) }
+-}
 
 update : App.Msg -> App.Model -> (App.Model, Cmd App.Msg)
 update msg model = case msg of
@@ -33,38 +44,6 @@ update msg model = case msg of
           in (App.setThingM thingModel model, Cmd.map App.ThingModuleMsg thingCmd)
 
 
--- deprecated (will not work after upgrade to next version)
-type alias RouteData = Result String ElmRoute.ElmRoute
-
-
-isRouteTheSame : RouteData -> App.Model -> Bool
-isRouteTheSame data model = 
-            let currentRoute = RoutingModule.getRoute model.routeM
-            in case data of 
-               Ok route ->
-                  (route == currentRoute)
-               Err _ ->
-                  (currentRoute == ElmRoute.defaultRoute)  
-
-routeParser : Nav.Parser (Result String ElmRoute.ElmRoute)
-routeParser =
-    Nav.makeParser ElmRoute.parseElmRoute
-
-
-resolveParsedRoute : RouteData -> App.Msg
-resolveParsedRoute res = case res of 
-     Ok elmRoute -> 
-          App.RoutingModuleMsg <| RoutingModule.RouteMsg elmRoute
-     Err msg -> 
-          App.RoutingModuleMsg <| RoutingModule.UnknownRouteMsg <| Debug.log "invalid route" msg
- 
-urlUpdate : RouteData -> App.Model -> (App.Model, Cmd App.Msg)
-urlUpdate data model = 
-       if isRouteTheSame data model 
-       then (model, Cmd.none)
-       else (model, CmdE.pure <| resolveParsedRoute data)
-
--- new version of library (after update to .18)
 resolveLocation : Nav.Location -> App.Msg
 resolveLocation location =
     let url = location.hash
@@ -73,4 +52,4 @@ resolveLocation location =
        Ok elmRoute ->
           App.RoutingModuleMsg <| RoutingModule.RouteMsg elmRoute
        Err msg -> 
-          App.RoutingModuleMsg <| RoutingModule.UnknownRouteMsg <| Debug.log ("error parsing location" ++ msg) url
+          App.RoutingModuleMsg <| RoutingModule.UnknownRouteMsg <| Debug.log ("error parsing location " ++ msg) url

@@ -1,8 +1,7 @@
 module Util.Logger.HtmlProgram exposing (..)
  
-import Html.App as Html
+import Html as Html exposing (Html)
 import Util.Logger exposing (..)
-import Html exposing (Html)
 
 
 type alias ProgramLogic model msg = 
@@ -13,7 +12,7 @@ type alias ProgramLogic model msg =
   , subscriptions : model -> Sub msg 
   , view : model -> Html msg }
  
-program : ProgramLogic model msg -> Program Never
+program : ProgramLogic model msg -> Program Never model msg
 program logic = Html.program {
      init = log1 Std LInit (always logic.loggerConf) describeOutputModelAndCmd 
                   <| logic.init    

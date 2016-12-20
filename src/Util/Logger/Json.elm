@@ -1,6 +1,6 @@
 module Util.Logger.Json exposing (loggerConfigDecoder)
 
-import Json.Decode as Json exposing ((:=))
+import Json.Decode as Json
 import Util.Logger exposing (..)
 
 loggerFlagDecoder : String -> Json.Decoder LoggerFlag
@@ -29,6 +29,6 @@ loggerLevelDecoder tag = case tag of
       _ -> Json.fail (tag ++ " is not a recognized tag for LoggerLevel")
 
 loggerConfigDecoder : Json.Decoder LoggerConfig
-loggerConfigDecoder =  Json.object2 LoggerConfig
-    ("logLevel" := Json.string `Json.andThen` loggerLevelDecoder)
-    ("logFlags" := Json.list (Json.string `Json.andThen` loggerFlagDecoder))
+loggerConfigDecoder =  Json.map2 LoggerConfig
+    (Json.field "logLevel" (Json.string |> Json.andThen loggerLevelDecoder))
+    (Json.field "logFlags" (Json.list (Json.string |> Json.andThen loggerFlagDecoder)))

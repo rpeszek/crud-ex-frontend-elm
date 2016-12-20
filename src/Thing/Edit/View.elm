@@ -18,7 +18,7 @@ viewThing thing =
   [
     (
       "Name", 
-      input (DefStyle.textInputDefault ++ [ type' "text", value thing.name, onInput <| MsgS.InnerMsg << Logic.NameChange]) []
+      input (DefStyle.textInputDefault ++ [ type_ "text", value thing.name, onInput <| MsgS.InnerMsg << Logic.NameChange]) []
     ),
     (
       "Description", 

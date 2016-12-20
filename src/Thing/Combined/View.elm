@@ -1,7 +1,6 @@
 module Thing.Combined.View exposing (..)
 
-import Html exposing (..)
-import Html.App as Html
+import Html as Html exposing (Html)
 import Html.Attributes exposing (..)
 import ElmRoutes exposing (ElmRoute(..))
 import Thing.Combined.Logic as Logic 
