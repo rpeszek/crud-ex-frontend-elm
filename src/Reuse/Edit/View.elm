@@ -27,7 +27,9 @@ viewFormRow (label_, fieldHtml) =
 --
 viewReuse : (model -> List (String, Html (MsgS.EditMsg model msg))) -> ModelS.ModelPlus model -> Html (MsgS.EditMsg model msg)
 viewReuse fieldSetElements model =
-  Html.form DefStyle.formDefault [
-     Html.fieldset [] (List.map viewFormRow (fieldSetElements model.model) ++
-        [ viewError model, viewButtons model])
-  ] 
+  div [] [
+    Html.form DefStyle.formDefault [
+      Html.fieldset [] (List.map viewFormRow (fieldSetElements model.model))
+    ] 
+    , div DefStyle.formDefault [ viewError model, viewButtons model] --Elm issue navigating buttons should be outside of form
+  ]

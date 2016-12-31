@@ -13,15 +13,6 @@ import Navigation
  
 thingConfig : ThingModule.UpdateConf
 thingConfig = {
-   editExitCmd = always <| Navigation.back 1
- , readToEditCmd = (\tId -> ElmRoute.navigateTo <| ElmRoute.EditThingR tId)
- , readToExitCmd = always <| Navigation.back 1
- , listToViewCmd = (\tId -> ElmRoute.navigateTo <| ElmRoute.ViewThingR tId )
- , listToCreateCmd = (\_ -> ElmRoute.navigateTo ElmRoute.CreateThingR) }
-
-{-
---TODO there appears to be bug and cancel triggers two URL updates!
-thingConfig = {
    editExitCmd = (\maybeTId -> case maybeTId of 
                      Just tId ->  ElmRoute.navigateTo <| ElmRoute.ViewThingR tId
                      Nothing -> ElmRoute.navigateTo ElmRoute.ListThingsR
@@ -30,7 +21,7 @@ thingConfig = {
  , readToExitCmd = (\_ -> ElmRoute.navigateTo ElmRoute.ListThingsR)
  , listToViewCmd = (\tId -> ElmRoute.navigateTo <| ElmRoute.ViewThingR tId )
  , listToCreateCmd = (\_ -> ElmRoute.navigateTo ElmRoute.CreateThingR) }
--}
+
 
 update : App.Msg -> App.Model -> (App.Model, Cmd App.Msg)
 update msg model = case msg of
