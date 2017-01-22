@@ -1,3 +1,8 @@
+{-
+ Server URLs for Http interactions.
+ Not needed when using Servant generated interface code.
+-}
+
 module ServerRoutes exposing (..)
 
 import Thing.Model exposing (ThingId)

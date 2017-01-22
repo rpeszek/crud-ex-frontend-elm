@@ -1,3 +1,6 @@
+.pure-g {
+    letter-spacing: 0; /* fixes pure-g negative setting */
+}
 .pure-g > div {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;

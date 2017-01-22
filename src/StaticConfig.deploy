@@ -1,3 +1,8 @@
+{-
+  Version of StaticConfig for Web server deployment. 
+  (Elm is served from the same web server that provides JSON endpoints).
+  Defines base server URL.
+-}
 module StaticConfig exposing (..)
 
 serverBase = ""  

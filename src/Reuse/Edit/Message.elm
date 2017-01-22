@@ -11,7 +11,7 @@ type EditMsg model msg =
     | InnerMsg msg
     | SaveRequest
     | CancelRequest
-    | GetHttpResult (HttpS.HttpRes HttpS.HttpGET model)
+    | GetHttpResult (HttpS.HttpRes HttpS.HttpGET (Maybe model))
     | PutHttpResult (HttpS.HttpRes HttpS.HttpPUT model)
     | PostHttpResult (HttpS.HttpRes HttpS.HttpPOST (ModelEntity model))
 
@@ -22,7 +22,7 @@ type alias UpdateConfig model msg = {
     innerUpdate : msg -> model -> (model, Cmd (EditMsg model msg))
   , validate : model -> Result String model
   , empty : model
-  , getModel : Int -> Cmd (HttpS.HttpRes HttpS.HttpGET model)
+  , getModel : Int -> Cmd (HttpS.HttpRes HttpS.HttpGET (Maybe model))
   , putModel : Int -> model -> Cmd (HttpS.HttpRes HttpS.HttpPUT model)
   , postModel : model -> Cmd (HttpS.HttpRes HttpS.HttpPOST (ModelEntity model))
   , exitCmd : Maybe Int -> Cmd (EditMsg model msg)
@@ -41,8 +41,10 @@ updateEditModel updateConf msg model = case msg of
          Nothing ->
               (ModelS.initNewModel updateConf.empty, Cmd.none)
     GetHttpResult getModelMsg -> case getModelMsg of 
-         HttpS.HttpResOk HttpS.HttpGET newInnerModel ->
+         HttpS.HttpResOk HttpS.HttpGET (Just newInnerModel) ->
             (ModelS.setModel newInnerModel model, Cmd.none)
+         HttpS.HttpResOk HttpS.HttpGET Nothing ->
+            (ModelS.setErr "Invalid id" Nothing model, Cmd.none)
          HttpS.HttpResErr HttpS.HttpGET msg error ->
             -- let _ = Debug.log "error" err
             (ModelS.setErr msg (Just error) model, Cmd.none)

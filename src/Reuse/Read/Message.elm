@@ -10,14 +10,14 @@ type ReadMsg model msg =
     | EditRequest
     | DeleteRequest
     | CancelRequest
-    | GetHttpResult (HttpS.HttpRes HttpS.HttpGET model)
+    | GetHttpResult (HttpS.HttpRes HttpS.HttpGET (Maybe model))
     | DeleteHttpResult (HttpS.HttpRes HttpS.HttpDELETE ())
 
 
 -- model and msg are inner, eg. ThingMsg, Thing
 type alias UpdateConfig model msg = {
     empty : model 
-  , getModel : Int -> Cmd (HttpS.HttpRes HttpS.HttpGET model)
+  , getModel : Int -> Cmd (HttpS.HttpRes HttpS.HttpGET (Maybe model))
   , deleteModel : Int -> Cmd (HttpS.HttpRes HttpS.HttpDELETE ())
   , editCommand : Int -> Cmd (ReadMsg model msg)
   , exitCmd : Int -> Cmd (ReadMsg model msg)  -- used on delete only
@@ -37,8 +37,10 @@ updateReadModel updateConf msg model = case model.id of
         (ModelS.initExistingModel modelId_ updateConf.empty, 
                                  Cmd.map GetHttpResult <| updateConf.getModel modelId_)
     GetHttpResult getModelMsg -> case getModelMsg of 
-         HttpS.HttpResOk HttpS.HttpGET newInnerModel ->
+         HttpS.HttpResOk HttpS.HttpGET (Just newInnerModel) ->
             (ModelS.setModel newInnerModel model, Cmd.none)
+         HttpS.HttpResOk HttpS.HttpGET Nothing ->
+            (ModelS.setErr "Invalid id" Nothing model, Cmd.none)
          HttpS.HttpResErr HttpS.HttpGET msg error ->
             -- let _ = Debug.log "error" err
             (ModelS.setErr msg (Just error) model, Cmd.none)
