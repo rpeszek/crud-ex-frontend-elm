@@ -1,31 +1,25 @@
 Example frontend CRUD project in Elm.  
 See my CRUD umbrella project:  [typesafe-web-polyglot](https://github.com/rpeszek/typesafe-web-polyglot.git).
 
-__Goals:__
-* Type-checked Web!
+__Features:__
+* Almost (since this is Elm) polymorphic CRUD 
+   - code reuse across crud-ed entities
+   - CRUD components agnostic of each other existence
+* Type safe Web
    * Typed Web API for server interaction
    * Client-side typed dispatch API using hash URL fragments
-* Following TEA architecture closely
-* Independent CRUD components testable in isolation and agnostic of each other 
-* CRUD code reuse across crud-ed entities
-* Almost-SPA (large page scopes), SPA ready design
+   * Optional use of servant generated code (see [crud-ex-backend-servant](https://github.com/rpeszek/crud-ex-backend-servant.git) and [FromServant.ThingApi](FromServant/ThingApi.elm)).
+* Almost-SPA / SPA design
 
-__Features:__ 
-* Elm CRUD user interface for my 'Thing' example. 
-* Server interaction API generated from Servant
-(see [crud-ex-backend-servant](https://github.com/rpeszek/crud-ex-backend-servant.git) and [FromServant.ThingApi](FromServant/ThingApi.elm)).
+__Other Features:__ 
 * Customizable logging of elm runtime interactions
 
 See also: [Naming Conventions/Code Review](README_CODE_REVIEW.md)
 
 __TODO List:__  
-* Implement security and entity ownership
 * List pagination support
-* Add has-many relationship to example CRUD
-* Logging as UI component?
 * Keep rethinking styling and views 
    * should I keep using purecss?
-* Improve validation
 
 __Git:__  
 I am using submodules to get dependencies/elm-purecss,  elm-purecss project is not available
