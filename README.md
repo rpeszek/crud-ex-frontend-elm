@@ -27,7 +27,8 @@ as elm 0.18 package dependency.
 
 __Backend companion projects:__  
 [crud-ex-backend-yesod](https://github.com/rpeszek/crud-ex-backend-yesod.git).  
-[crud-ex-backend-servant](https://github.com/rpeszek/crud-ex-backend-servant.git) 
+[crud-ex-backend-servant](https://github.com/rpeszek/crud-ex-backend-servant.git)  
+[crud-ex-backent-http4s](https://github.com/rpeszek/crud-ex-backent-http4s.git)
 
 __To Run in elm-reactor:__  
 0. Install [Elm Platform](http://elm-lang.org/)  
