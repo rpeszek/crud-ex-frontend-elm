@@ -53,4 +53,4 @@ __Conclusions (so far):__
 * Would like to see 
    * more stable language API
    * package manager working with ported (JS FFI) projects
-   * language polymorphism (is it FP if I cannot define classic denotational abstractions? How about laws and proof obligation?) 
+   * language polymorphism (is it FP without denotational abstractions? laws? proof obligations?) 
